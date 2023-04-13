@@ -1,14 +1,17 @@
 import React from "react"
 import validation from "../utils/validation"
+import { loginURL } from "../utils/constant"
+import withRouter from "../utils/withRouter"
+
 
 
 class signIn extends React.Component{
     state={
-        email:null,
-        password:null,
+        email:'',
+        password:'',
         errors:{
-            email:null,
-            password:null
+            email:'',
+            password:''
         }
     }
 
@@ -23,13 +26,43 @@ class signIn extends React.Component{
 
     handleSubmit=(event)=>{
         event.preventDefault()
+        let {email,password}=this.state
+        fetch(loginURL,{
+            method:"POST",
+            headers:{
+                "Content-Type":"application/json"
+            },
+           body:JSON.stringify({user:{email,password}})
+        })
+        .then(res=>{
+            if(!res.ok){
+             return   res.json().then(({errors})=>{
+                    return Promise.reject(errors)
+                })
+            }
+            return res.json()
+        })
+        .then(({user})=>{
+            console.log(user)
+            this.props.updateUser(user)
+            this.setState({email:'',password:''})
+            this.props.navigate('/')
+        }).catch((errors)=>this.setState((prevState)=>{
+            return {
+                ...prevState,
+                errors:{
+                    ...prevState.errors,
+                    email:'Email or Password inCorrect'
+                }
+            }
+        }))
     }
     
     render(){
         let {email,password,errors}=this.state
         return(
             <>
-               <form className="signin" onSubmit={this.handleSubmit}>
+               <form className="forms" onSubmit={this.handleSubmit}>
                 <h1 className="text-align font-2 margin-b-1 font-600">Sign in</h1>
                 <p className="green text-align margin-b-1">Need an account?</p>
                 <input
@@ -64,4 +97,4 @@ class signIn extends React.Component{
         
 }
 
-export default signIn
+export default  withRouter(signIn)

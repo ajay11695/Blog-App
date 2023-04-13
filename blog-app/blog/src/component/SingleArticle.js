@@ -1,5 +1,4 @@
 import React from "react"
-import { useParams } from "react-router-dom"
 import { articlesURL } from "../utils/constant"
 import { Loader } from "./Loader"
 
@@ -22,7 +21,7 @@ class SingleArticle extends React.Component {
 
     render() {
         let { article, error } = this.state
-        let { author, createdAt, favoritesCount, title, description, tagList } = { ...article }
+        let { author, createdAt, title, description, tagList } = { ...article }
         console.log()
         if (error) {
             return <p className="text-align font-1 margin-t-1">{error}</p>

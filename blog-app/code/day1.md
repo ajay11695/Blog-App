@@ -1,6 +1,6 @@
 ## Assignment: Day 1
 
-[blog-app-intruction]('https://www.youtube.com/watch?v=n6KeMhvsSn0')
+blog-app-intruction:https://www.youtube.com/watch?v=n6KeMhvsSn0
 
 # Blog App
 
@@ -26,13 +26,13 @@ Don't pollute the API by posting some test data (like testingggg etc). When you 
 
 ## Basic Informations:
 
- - BASE URL: [https://conduitapi.onrender.com/api]('https://conduitapi.onrender.com/api')
+ - BASE URL: https://conduitapi.onrender.com/api
 
- - BASE URL2: [https://conduit.productionready.io/api]('https://conduit.productionready.io/api')
+ - BASE URL2: https://conduit.productionready.io/api
 
- - BASE URL2: [https://mighty-oasis-08080.herokuapp.com/api/]('https://mighty-oasis-08080.herokuapp.com/api/')
+ - BASE URL2: https://mighty-oasis-08080.herokuapp.com/api/
 
- - Demo for reference: [https://ac-blog-app.vercel.app/]('https://ac-blog-app.vercel.app/') or [https://conduit-re-frame-demo.netlify.app/]('https://conduit-re-frame-demo.netlify.app/')
+ - Demo for reference:https://ac-blog-app.vercel.app/ or https://conduit-re-frame-demo.netlify.app/
 
 #### You can change the look of the website the way you want. Make sure to have all the functionality as mentioned
 
@@ -40,7 +40,7 @@ Don't pollute the API by posting some test data (like testingggg etc). When you 
 
 For information regarding the API endpoints go through the link below. You will find everything you need. Look carefully
 
-[API Endpoints Specs]('https://gist.github.com/nnnkit/88db374b4ce62587a86bb32dd0b36ccb')
+![API Endpoints Specs]('https://gist.github.com/nnnkit/88db374b4ce62587a86bb32dd0b36ccb')
 
 ## Things To Complete Today
 

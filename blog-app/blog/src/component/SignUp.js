@@ -1,16 +1,17 @@
 import React from "react"
 import validation from "../utils/validation"
-
+import { signUpURL } from "../utils/constant"
+import withRouter from "../utils/withRouter"
 
 class signUp extends React.Component{
     state={
-        username:null,
-        email:null,
-        password:null,
+        username:'',
+        email:'',
+        password:'',
         errors:{
-            username:null,
-            email:null,
-            password:null
+            username:'',
+            email:'',
+            password:''
         }
     }
 
@@ -25,13 +26,35 @@ class signUp extends React.Component{
 
     handleSubmit=(event)=>{
         event.preventDefault()
+        let {username,email,password}=this.state
+        fetch(signUpURL,{
+            method:"POST",
+            headers:{
+                "Content-Type":"application/json"
+            },
+           body:JSON.stringify({user:{username,email,password}})
+        })
+        .then(res=>{
+            if(!res.ok){
+              return  res.json().then(({errors})=>{
+                return Promise.reject(errors)
+              })
+            }
+            return res.json()
+        })
+        .then(({user})=>{
+            console.log(user)
+            this.props.updateUser(user)
+            this.setState({username:'',email:'',password:''})
+            this.props.navigate('/')
+        }).catch((errors)=>this.setState({errors}))
     }
     
     render(){
         let {username,email,password,errors}=this.state
         return(
             <>
-               <form className="signin" onSubmit={this.handleSubmit}>
+               <form className="forms" onSubmit={this.handleSubmit}>
                 <h1 className="text-align font-2 margin-b-1 font-600">Sign up</h1>
                 <p className="green text-align margin-b-1">Have an account?</p>
                 <input
@@ -75,4 +98,4 @@ class signUp extends React.Component{
         
 }
 
-export default signUp
+export default withRouter(signUp)
