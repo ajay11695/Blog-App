@@ -40,7 +40,7 @@ Don't pollute the API by posting some test data (like testingggg etc). When you 
 
 For information regarding the API endpoints go through the link below. You will find everything you need. Look carefully
 
-![API Endpoints Specs]('https://gist.github.com/nnnkit/88db374b4ce62587a86bb32dd0b36ccb')
+API Endpoints Specs:  https://gist.github.com/nnnkit/88db374b4ce62587a86bb32dd0b36ccb
 
 ## Things To Complete Today
 

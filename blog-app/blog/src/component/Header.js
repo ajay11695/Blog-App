@@ -5,19 +5,24 @@ export function Header(props) {
     <header >
       <div className='container flex justify-between align-center'>
         <NavLink to='/' style={{ fontSize: '2rem', fontWeight: '700', color: 'tomato' }}><i className="fa-sharp fa-solid fa-blog"></i>BLOG</NavLink>
-        {props.isLogged?<Authenticate/>:<NonAuthenticate/>}
+        {props.isLogged ? <Authenticate currentUser={props.user} /> : <NonAuthenticate />}
       </div>
     </header>
   )
 }
 
-function Authenticate() {
+function Authenticate(props) {
   return (
-    <nav className='flex'>
+    <nav className='flex align-center'>
       <li><NavLink to='/' activeclassname='active'>HOME</NavLink></li>
       <li> <NavLink to='/new-post' activeclassname='active'>NEW POST</NavLink></li>
-      <li> <NavLink to='/setting' activeclassname='active'>SETTING</NavLink></li>
-      <li> <NavLink to='/profile' activeclassname='active'>PROFILE</NavLink></li>
+      <li> <NavLink to='/setting' activeclassname='active'><i className="fa-solid fa-gear"></i> SETTING</NavLink></li>
+      <li> <NavLink to={`/profiles/${props.currentUser.username}`} activeclassname='active'>
+        <div className='flex align-center'>
+          <img src={props.currentUser.image} alt={props.currentUser.username}/>
+          <span style={{marginLeft:'.5rem'}}>{props.currentUser.username.toUpperCase()}</span>
+        </div>
+      </NavLink></li>
     </nav>
   )
 }

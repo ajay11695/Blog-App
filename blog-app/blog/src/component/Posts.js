@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom"
 import { Loader } from "./Loader"
 
+
 function Posts(props) {
     let { articles, error } = props
     if (error) {
@@ -22,17 +23,19 @@ function Posts(props) {
 }
 
 function Article(props) {
-    let { author, createdAt, title, description, tagList, favoritesCount,slug } = props
+    let { author, createdAt, title, description, tagList, favoritesCount, slug } = props
     return (
         <div className="article">
             <div className="flex justify-between">
-                <div className="flex">
-                    <img src={author.image} alt={author.username} />
-                    <div>
-                        <h1 className="font-1 green">{author.username}</h1>
-                        <p className="gray">{createdAt}</p>
+                <Link to={`/profiles/${author.username}`}>
+                    <div className="flex">
+                        <img src={author.image} alt={author.username} />
+                        <div className="curser">
+                            <h1 className="font-1 green">{author.username}</h1>
+                            <p className="gray">{createdAt}</p>
+                        </div>
                     </div>
-                </div>
+                </Link>
                 <div className="heart flex justify-center align-center">
                     <span className="green">&hearts;</span>
                     <span className="green">{favoritesCount}</span>

@@ -11,9 +11,9 @@ import { useEffect, useState } from "react";
 import { localStorageKey } from "./utils/constant";
 import { userVerifyURL } from "./utils/constant";
 import { FullPageSpinner } from "./component/FullPageSpinner";
-import { Profile } from "./component/Profile";
 import NewPost from "./component/NewPost";
 import Setting from "./component/Setting";
+import Profile from "./component/Profile";
 // import { dataContext } from "./component/BlogContext";
 
 function App() {
@@ -28,16 +28,23 @@ function App() {
       fetch(userVerifyURL, {
         method: "GET",
         headers: {
-          authorization: `Token ${key}`
-        }
-      }).then(res => {
-        if (!res.ok) {
-          return res.json().then(({ error }) => {
-            return Promise.reject(error)
-          })
-        }
-        return res.json()
-      }).then(({ user }) => updateUser(user)).catch(error => console.log(error))
+          "Content-Type": "application/json",
+          authorization: `Token ${key}`,
+        },
+      })
+        .then((res) => {
+          if (!res.ok) {
+            return res.json().then(({ errors }) => {
+              console.log(errors)
+              return Promise.reject(errors)
+            })
+          }
+          return res.json();
+        })
+        .then(({ user }) => {
+          console.log(user)
+          updateUser(user)
+        }).catch(errors => console.log(errors))
 
     } else {
       setTimeout(() => setIsVerifying(false), 1000)
@@ -59,35 +66,38 @@ function App() {
   return (
     <>
       <Header user={user} isLogged={isLogged} />
-      {isLogged ? <AuthenticateApp user={user} />: <NotAuthenticateApp updateUser={updateUser} />
-      }
+      <Routes>
+        <Route path='/' element={<Home />} />
+        <Route path='/profiles/:username' element={<Profile user={user} />} />
+        <Route path='/article/:slug' element={<SingleArticle user={user} />} />
+        <Route path='*' element={<NoMatch />} />
+        <Route path='/new-post' element={<NewPost user={user} />} />
+      <Route path='/setting' element={<Setting user={user} updateUser={updateUser}/>} />
+      <Route path='/signin' element={<SignIn updateUser={updateUser} />} />
+      <Route path='/signup' element={<SignUp updateUser={updateUser} />} />
+      </Routes>
+        {/* {isLogged ? <AuthenticateApp user={user} /> : <NotAuthenticateApp updateUser={updateUser} user={user} />
+        } */}
     </>
   );
 }
 
-function AuthenticateApp(props) {
-  return (
-    <Routes>
-      <Route path='/' element={<Home />} />
-      <Route path='/new-post' element={<NewPost />} />
-      <Route path='/setting' element={<Setting />} />
-      <Route path='/profile' element={<Profile user={props.user} />} />
-      <Route path='/article/:slug' element={<SingleArticle />} />
-      <Route path='*' element={<NoMatch />} />
-    </Routes>
-  )
-}
+// function AuthenticateApp(props) {
+//   return (
+//     <Routes>
+//       <Route path='/new-post' element={<NewPost user={props.user} />} />
+//       <Route path='/setting' element={<Setting user={props.user} />} />
+//     </Routes>
+//   )
+// }
 
-function NotAuthenticateApp(props) {
-  return (
-    <Routes>
-      <Route path='/' element={<Home />} />
-      <Route path='/signin' element={<SignIn updateUser={props.updateUser} />} />
-      <Route path='/signup' element={<SignUp updateUser={props.updateUser} />} />
-      <Route path='/article/:slug' element={<SingleArticle />} />
-      <Route path='*' element={<NoMatch />} />
-    </Routes>
-  )
-}
+// function NotAuthenticateApp(props) {
+//   return (
+//     <Routes>
+//       <Route path='/signin' element={<SignIn updateUser={props.updateUser} />} />
+//       <Route path='/signup' element={<SignUp updateUser={props.updateUser} />} />
+//     </Routes>
+//   )
+// }
 
 export default App;

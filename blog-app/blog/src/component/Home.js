@@ -63,6 +63,7 @@ class Home extends React.Component {
 
     render() {
         let { articles, articlesCount, error,articlePerPage ,activePageIndex,activeTab} = this.state
+        console.log(articles,articlesCount)
         return (
             <>
                 <Hero />
