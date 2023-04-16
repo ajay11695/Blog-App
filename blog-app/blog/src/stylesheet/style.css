@@ -1,14 +1,21 @@
 
 /* header */
+
 header{
     background-color: rgb(218, 220, 221);
     padding: 1rem 0;
 }
 
+.curser{cursor: pointer;}
+
+img{
+    border-radius: 50%;
+}
 li{list-style: none;}
 a{text-decoration: none;}
 
 header li{margin:0 2rem;}
+header li img{width: 30px;height: 30px;}
 header li a:hover{color:green;}
 
 nav .active{font-weight: 700;}
@@ -45,7 +52,6 @@ nav .active{font-weight: 700;}
 /* article */
 .article img{
     margin-right: 1rem;
-    border-radius: 50%;
 }
 
 .heart{
@@ -133,6 +139,37 @@ nav .active{font-weight: 700;}
     padding: 1rem 1rem;
     margin: 2rem 0;
 }
+
+/* profile */
+.profileHeader{
+    background-color: rgb(182, 230, 232);
+    padding: 2rem 0;
+}
+
+.profileHeader img{
+    width: 70px;
+    height: 70px;
+}
+
+.profileFollow{
+    border: 1px solid;
+    margin-left: 60rem;
+    padding: 5px 10px;
+}
+
+.profileNav{margin-top: 2rem;}
+
+.profileNav a{
+    font-size: 1.2rem;
+    margin-right: 1rem;
+}
+
+/* setting */
+.logoutbtn{
+    padding: 5px 10px;
+   border-color: red;
+}
+.logoutbtn:hover{background-color: tomato;color: white;}
 
 footer{
     background-color: rgb(218, 220, 221);
