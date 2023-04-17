@@ -14,6 +14,7 @@ import { FullPageSpinner } from "./component/FullPageSpinner";
 import NewPost from "./component/NewPost";
 import Setting from "./component/Setting";
 import Profile from "./component/Profile";
+import EditPost from "./component/EditPost";
 // import { dataContext } from "./component/BlogContext";
 
 function App() {
@@ -67,37 +68,19 @@ function App() {
     <>
       <Header user={user} isLogged={isLogged} />
       <Routes>
-        <Route path='/' element={<Home />} />
+        <Route path='/' element={<Home currentUser={user}/>} />
         <Route path='/profiles/:username' element={<Profile user={user} />} />
         <Route path='/article/:slug' element={<SingleArticle user={user} />} />
         <Route path='*' element={<NoMatch />} />
         <Route path='/new-post' element={<NewPost user={user} />} />
+        <Route path='/article/:slug/edit' element={<EditPost user={user} />} />
       <Route path='/setting' element={<Setting user={user} updateUser={updateUser}/>} />
       <Route path='/signin' element={<SignIn updateUser={updateUser} />} />
       <Route path='/signup' element={<SignUp updateUser={updateUser} />} />
       </Routes>
-        {/* {isLogged ? <AuthenticateApp user={user} /> : <NotAuthenticateApp updateUser={updateUser} user={user} />
-        } */}
     </>
   );
 }
 
-// function AuthenticateApp(props) {
-//   return (
-//     <Routes>
-//       <Route path='/new-post' element={<NewPost user={props.user} />} />
-//       <Route path='/setting' element={<Setting user={props.user} />} />
-//     </Routes>
-//   )
-// }
-
-// function NotAuthenticateApp(props) {
-//   return (
-//     <Routes>
-//       <Route path='/signin' element={<SignIn updateUser={props.updateUser} />} />
-//       <Route path='/signup' element={<SignUp updateUser={props.updateUser} />} />
-//     </Routes>
-//   )
-// }
 
 export default App;

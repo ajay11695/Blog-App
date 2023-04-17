@@ -1,10 +1,8 @@
 import Posts from "./Posts";
 import { useState ,useEffect} from "react";
-import Pagination from './Pagination'
 import { articlesURL, getProfileURL } from "../utils/constant";
 import { useParams } from "react-router";
 import { Link } from "react-router-dom";
-// import { Link } from "react-router-dom";
 
 function Profile(props) {
     let [articles, setArticles] = useState([])
@@ -13,11 +11,14 @@ function Profile(props) {
 
     let username=useParams().username
 
-    // console.log(useParams())
-
     function fetchData(){
-
-        fetch(articlesURL + `/?${activeTab}=${username}`).then(res => {
+        fetch(articlesURL + `/?${activeTab}=${username}`,{
+            method:"GET",
+            headers:{
+             "Authorization":props.user?`Token ${props.user.token}`:''
+            }
+        })
+        .then(res => {
             if (!res.ok) {
                 throw new Error(res.statusText)
             }
@@ -31,17 +32,19 @@ function Profile(props) {
             })
     }
 
-    
-
     const fetchprofile=()=>{
-        fetch(getProfileURL + username).then(res => {
+        fetch(getProfileURL + username,{
+            method:"GET",
+                headers:{
+                 "Authorization":props.user?`Token ${props.user.token}`:''
+                }
+        }).then(res => {
             if (!res.ok) {
                 throw new Error(res.statusText)
             }
             return res.json()
         })
             .then(data => {
-                // console.log(data)
                 setProfile(data.profile)
             }).catch((error) => {
                 console.log(error)
@@ -50,15 +53,34 @@ function Profile(props) {
 
     useEffect(()=>{
         fetchData()
+    },[activeTab,articles])
+
+    useEffect(()=>{
         fetchprofile()
-    },[])
+    },[username,articles])
 
     function handleTab(tab){
         setActiveTab(tab)
-        fetchData()
     }
 
-    // console.log(props.user)
+    function handleFollow(following){
+        console.log(following)
+         if(following){
+            fetch(getProfileURL + username+'/follow',{
+                method:"DELETE",
+                headers:{
+                 "Authorization":props.user?`Token ${props.user.token}`:''
+                }
+            }).then(()=>fetchprofile())
+         }else{
+            fetch(getProfileURL + username+'/follow',{
+                method:"POST",
+                headers:{
+                 "Authorization":props.user?`Token ${props.user.token}`:''
+                }
+            }).then(()=>fetchprofile())
+         }
+    }
 
     return (
         <div className="">
@@ -68,7 +90,7 @@ function Profile(props) {
                 {props.user && props.user.username===username?
                 <Link to='/setting'><span className=" profileFollow margin-t-2 "><i className="fa-solid fa-gear"></i> Edit Profile Setting</span></Link>
                 :
-                <span className=" profileFollow margin-t-2 ">+ Follow {profile.username}</span>
+                <span onClick={()=>{handleFollow(profile.following)}} className=" profileFollow margin-t-2 curser"><strong className="font-1 font-600">{profile.following?'Unfollow':'Follow' } </strong> ({profile.username})</span>
             }
             </div>
             <div className="container">
@@ -77,8 +99,7 @@ function Profile(props) {
                     <a href='#a' onClick={()=>{handleTab('favorited')}} className={activeTab === 'favorited' ? 'activeTab' : ''}>Favorite Article</a>
                     <hr />
                 </nav>
-                {articles.length === 0 ? <h1>No Article Found</h1> : <Posts articles={articles} />}
-                <Pagination />
+                {articles.length === 0 ? <h1>No Article Found</h1> : <Posts articles={articles} currentUser={props.user} />}
             </div>
         </div>
     )
