@@ -1,9 +1,12 @@
-import { useState } from "react"
+import { useState,useEffect } from "react"
 import { articlesURL } from "../utils/constant"
-import withRouter from "../utils/withRouter"
 import React from "react"
+import { useNavigate } from "react-router"
+import { useParams } from "react-router"
 
-function NewPost(props) {
+function EditPost(props) {
+    const navigate=useNavigate()
+    const slug=useParams().slug
     let [article, setArticle] = useState({
         title: '',
         description: '',
@@ -11,6 +14,25 @@ function NewPost(props) {
         tagList: '',
         errors:''
     })
+
+    function fetchPost(){
+        fetch(articlesURL+`/${slug}`)
+        .then(res=>res.json())
+        .then(data=>{
+            console.log(data)
+            setArticle({
+                title:data.article.title,
+                description:data.article.description,
+                body:data.article.body,
+                tagList:data.article.tagList.join(','),
+                errors:''
+            })
+        })
+    }
+
+  useEffect(()=>{
+    fetchPost()
+  },[])
 
     function handleChange(event) {
         let { name, value } = event.target
@@ -25,8 +47,8 @@ function NewPost(props) {
     function handleSubmit(event){
         event.preventDefault()
         let {title,description,body,tagList}=article
-        fetch(articlesURL,{
-            method:"POST",
+        fetch(articlesURL+`/${slug}`,{
+            method:"PUT",
             headers:{
                 "Content-Type":"application/json",
                 authorization:`Token ${props.user.token}`
@@ -43,9 +65,8 @@ function NewPost(props) {
         })
         .then(({article})=>{
             console.log(article)
-            
             setArticle({title:'',description:'',body:'',tagList:''})
-            props.navigate('/')
+            navigate('/')
         }).catch((errors)=>setArticle((prevState=>{
             return {...prevState,errors}
         })))
@@ -57,13 +78,13 @@ function NewPost(props) {
                 <form className="forms">
                     <h1 className=" font-2 font-600 text-align margin-b-1">Add Post</h1>
                     <p>{article.errors.title}</p>
-                    <input className="formInput margin-b-1" name="title" placeholder="Article Title" type="text" onChange={handleChange} />
+                    <input className="formInput margin-b-1" name="title" placeholder="Article Title" type="text" onChange={handleChange} value={article.title}/>
                     <p>{article.errors.description}</p>
-                    <input className="formInput margin-b-1" name="description" placeholder="What's the article about" type="text" onChange={handleChange} />
+                    <input className="formInput margin-b-1" name="description" placeholder="What's the article about" type="text" onChange={handleChange} value={article.description}/>
                     <p>{article.errors.body}</p>
-                    <textarea className="formInput margin-b-1" name="body" placeholder="Write your article" type="text" onChange={handleChange} />
+                    <textarea className="formInput margin-b-1" name="body" placeholder="Write your article" type="text" onChange={handleChange} value={article.body}/>
                     <p>{article.errors.tagList}</p>
-                    <input className="formInput margin-b-1" name="tagList" placeholder="Enter tags" type="text" onChange={handleChange} />
+                    <input className="formInput margin-b-1" name="tagList" placeholder="Enter tags" type="text" onChange={handleChange} value={article.tagList}/>
                     <div className="text-align-end margin-b-1">
                         <input className="formbtn" type="submit" value="Publish Article" onClick={handleSubmit}/>
                     </div>
@@ -76,4 +97,4 @@ function NewPost(props) {
 }
 
 
-export default withRouter(NewPost)
+export default EditPost
