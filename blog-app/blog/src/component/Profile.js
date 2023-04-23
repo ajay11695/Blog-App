@@ -11,26 +11,25 @@ function Profile(props) {
 
     let username=useParams().username
 
-    function fetchData(){
-        fetch(articlesURL + `/?${activeTab}=${username}`,{
-            method:"GET",
-            headers:{
-             "Authorization":props.user?`Token ${props.user.token}`:''
-            }
-        })
-        .then(res => {
-            if (!res.ok) {
-                throw new Error(res.statusText)
-            }
-            return res.json()
-        })
-            .then(data => {
-                console.log(data)
-               setArticles(data.articles)
-            }).catch((error) => {
-                console.log(error)
-            })
-    }
+    // function fetchData(){
+    //     fetch(articlesURL + `/?${activeTab}=${username}`,{
+    //         method:"GET",
+    //         headers:{
+    //          "Authorization":props.user?`Token ${props.user.token}`:''
+    //         }
+    //     })
+    //     .then(res => {
+    //         if (!res.ok) {
+    //             throw new Error(res.statusText)
+    //         }
+    //         return res.json()
+    //     })
+    //         .then(data => {
+    //            setArticles(data.articles)
+    //         }).catch((error) => {
+    //             console.log(error)
+    //         })
+    // }
 
     const fetchprofile=()=>{
         fetch(getProfileURL + username,{
@@ -52,19 +51,51 @@ function Profile(props) {
     }
 
     useEffect(()=>{
-        fetchData()
-    },[activeTab,articles])
+        // fetchData()
+        fetch(articlesURL + `/?${activeTab}=${username}`,{
+            method:"GET",
+            headers:{
+             "Authorization":props.user?`Token ${props.user.token}`:''
+            }
+        })
+        .then(res => {
+            if (!res.ok) {
+                throw new Error(res.statusText)
+            }
+            return res.json()
+        })
+            .then(data => {
+               setArticles(data.articles)
+            }).catch((error) => {
+                console.log(error)
+            })
+    },[activeTab,props.user,username])
 
     useEffect(()=>{
-        fetchprofile()
-    },[username,articles])
+        // fetchprofile()
+        fetch(getProfileURL + username,{
+            method:"GET",
+                headers:{
+                 "Authorization":props.user?`Token ${props.user.token}`:''
+                }
+        }).then(res => {
+            if (!res.ok) {
+                throw new Error(res.statusText)
+            }
+            return res.json()
+        })
+            .then(data => {
+                setProfile(data.profile)
+            }).catch((error) => {
+                console.log(error)
+            })
+    },[username,props.user])
 
     function handleTab(tab){
         setActiveTab(tab)
     }
 
     function handleFollow(following){
-        console.log(following)
          if(following){
             fetch(getProfileURL + username+'/follow',{
                 method:"DELETE",

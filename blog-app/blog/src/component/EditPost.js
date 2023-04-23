@@ -15,24 +15,19 @@ function EditPost(props) {
         errors:''
     })
 
-    function fetchPost(){
-        fetch(articlesURL+`/${slug}`)
-        .then(res=>res.json())
-        .then(data=>{
-            console.log(data)
-            setArticle({
-                title:data.article.title,
-                description:data.article.description,
-                body:data.article.body,
-                tagList:data.article.tagList.join(','),
-                errors:''
-            })
-        })
-    }
-
   useEffect(()=>{
-    fetchPost()
-  },[])
+    fetch(articlesURL+`/${slug}`)
+    .then(res=>res.json())
+    .then(data=>{
+        setArticle({
+            title:data.article.title,
+            description:data.article.description,
+            body:data.article.body,
+            tagList:data.article.tagList.join(','),
+            errors:''
+        })
+    })
+  },[slug])
 
     function handleChange(event) {
         let { name, value } = event.target
@@ -64,7 +59,6 @@ function EditPost(props) {
             return res.json()
         })
         .then(({article})=>{
-            console.log(article)
             setArticle({title:'',description:'',body:'',tagList:''})
             navigate('/')
         }).catch((errors)=>setArticle((prevState=>{
@@ -76,7 +70,7 @@ function EditPost(props) {
         <>
             <div className="container">
                 <form className="forms">
-                    <h1 className=" font-2 font-600 text-align margin-b-1">Add Post</h1>
+                    <h1 className=" font-2 font-600 text-align margin-b-1">Edit Post</h1>
                     <p>{article.errors.title}</p>
                     <input className="formInput margin-b-1" name="title" placeholder="Article Title" type="text" onChange={handleChange} value={article.title}/>
                     <p>{article.errors.description}</p>
@@ -86,7 +80,7 @@ function EditPost(props) {
                     <p>{article.errors.tagList}</p>
                     <input className="formInput margin-b-1" name="tagList" placeholder="Enter tags" type="text" onChange={handleChange} value={article.tagList}/>
                     <div className="text-align-end margin-b-1">
-                        <input className="formbtn" type="submit" value="Publish Article" onClick={handleSubmit}/>
+                        <input className="formbtn" type="submit" value="Edit Post" onClick={handleSubmit}/>
                     </div>
 
                 </form>
